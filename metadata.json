@@ -1,0 +1,5 @@
+{
+  "name": "SCCCG-ALL-2025 辅助工具",
+  "description": "基于SCCCG-ALL-2025协议与血液病宝典开发的临床辅助工具，包含病人信息录入、危险度分层、MPAL判断、CNSL防治、L-ASP凝血监测及TLS防治等模块，采用iOS视觉风格。",
+  "requestFramePermissions": []
+}
