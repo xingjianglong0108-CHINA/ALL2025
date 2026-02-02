@@ -20,11 +20,14 @@ const App: React.FC = () => {
   const [activeTab, setActiveTab] = useState('patient');
   const [patient, setPatient] = useState<PatientInfo>({
     name: '',
+    hospitalId: '',
+    bedNumber: '',
     gender: '',
     age: '',
     height: '',
     weight: '',
-    initialWbc: ''
+    initialWbc: '',
+    diagnosisDate: new Date().toISOString().split('T')[0]
   });
 
   const bsa = useMemo(() => {
@@ -57,11 +60,9 @@ const App: React.FC = () => {
 
   return (
     <div className="min-h-screen flex flex-col max-w-md mx-auto bg-[#F2F2F7] selection:bg-blue-100">
-      {/* Dynamic Background Element */}
       <div className="fixed top-[-10%] left-[-10%] w-[40%] h-[30%] bg-blue-400/10 blur-[100px] pointer-events-none" />
       <div className="fixed bottom-[-5%] right-[-5%] w-[40%] h-[30%] bg-purple-400/10 blur-[100px] pointer-events-none" />
 
-      {/* Header */}
       <header className="sticky top-0 z-50 bg-white/60 ios-blur border-b border-gray-200/50 px-4 py-5">
         <div className="flex flex-col items-center">
           <span className="text-[10px] font-bold text-blue-500 uppercase tracking-tighter mb-0.5">Clinical Tool</span>
@@ -69,12 +70,10 @@ const App: React.FC = () => {
         </div>
       </header>
 
-      {/* Main Content */}
       <main className="flex-1 overflow-y-auto pb-28 px-4 pt-6">
         {renderContent()}
       </main>
 
-      {/* Tab Bar */}
       <nav className="fixed bottom-4 left-4 right-4 max-w-[calc(448px-2rem)] mx-auto bg-white/80 ios-blur border border-white/50 shadow-[0_8px_32px_rgba(0,0,0,0.1)] rounded-[32px] px-2 py-2 z-50">
         <div className="flex justify-around items-center">
           {tabs.map((tab) => {

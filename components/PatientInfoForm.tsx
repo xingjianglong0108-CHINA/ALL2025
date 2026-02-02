@@ -15,59 +15,86 @@ const PatientInfoForm: React.FC<Props> = ({ patient, setPatient, bsa }) => {
   };
 
   return (
-    <div className="animate-in fade-in slide-in-from-bottom-6 duration-500">
-      <IOSCard title="基础信息">
-        <div className="space-y-1">
-          <div className="flex items-center group py-3">
-            <div className="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center mr-3">
-              <span className="text-blue-500 text-xs font-bold">名</span>
+    <div className="animate-in fade-in slide-in-from-bottom-6 duration-500 space-y-2">
+      <IOSCard title="登记信息">
+        <div className="divide-y divide-gray-50">
+          {/* 姓名与住院号 */}
+          <div className="grid grid-cols-2 gap-4 py-3">
+            <div className="flex flex-col">
+              <span className="text-[10px] font-bold text-gray-400 uppercase mb-1">患者姓名</span>
+              <input
+                type="text"
+                placeholder="请输入"
+                value={patient.name}
+                onChange={(e) => handleChange('name', e.target.value)}
+                className="w-full outline-none text-sm font-bold text-gray-900 bg-transparent placeholder:text-gray-200"
+              />
             </div>
-            <span className="flex-1 text-sm font-semibold text-gray-600">患者姓名</span>
-            <input
-              type="text"
-              placeholder="请输入"
-              value={patient.name}
-              onChange={(e) => handleChange('name', e.target.value)}
-              className="w-32 text-right outline-none text-sm font-bold text-gray-900 bg-transparent placeholder:text-gray-300"
-            />
-          </div>
-          <div className="h-[1px] bg-gray-50 ml-11" />
-          
-          <div className="flex items-center py-3">
-            <div className="w-8 h-8 rounded-full bg-pink-50 flex items-center justify-center mr-3">
-              <span className="text-pink-500 text-xs font-bold">性</span>
-            </div>
-            <span className="flex-1 text-sm font-semibold text-gray-600">性别</span>
-            <div className="flex bg-gray-100/50 p-1 rounded-xl">
-              {['male', 'female'].map(g => (
-                <button
-                  key={g}
-                  onClick={() => handleChange('gender', g)}
-                  className={`text-[11px] px-4 py-1.5 rounded-lg font-bold transition-all ${
-                    patient.gender === g 
-                      ? 'bg-white shadow-sm text-blue-600' 
-                      : 'text-gray-400'
-                  }`}
-                >
-                  {g === 'male' ? '男' : '女'}
-                </button>
-              ))}
+            <div className="flex flex-col border-l border-gray-50 pl-4">
+              <span className="text-[10px] font-bold text-gray-400 uppercase mb-1">住院号</span>
+              <input
+                type="text"
+                placeholder="ID号"
+                value={patient.hospitalId}
+                onChange={(e) => handleChange('hospitalId', e.target.value)}
+                className="w-full outline-none text-sm font-bold text-gray-900 bg-transparent placeholder:text-gray-200"
+              />
             </div>
           </div>
-          <div className="h-[1px] bg-gray-50 ml-11" />
 
-          <div className="flex items-center py-3">
-            <div className="w-8 h-8 rounded-full bg-orange-50 flex items-center justify-center mr-3">
-              <span className="text-orange-500 text-xs font-bold">岁</span>
+          {/* 性别与年龄 */}
+          <div className="grid grid-cols-2 gap-4 py-3">
+            <div className="flex flex-col">
+              <span className="text-[10px] font-bold text-gray-400 uppercase mb-1">性别</span>
+              <div className="flex bg-gray-100/50 p-1 rounded-xl w-fit">
+                {['male', 'female'].map(g => (
+                  <button
+                    key={g}
+                    onClick={() => handleChange('gender', g)}
+                    className={`text-[10px] px-3 py-1 rounded-lg font-bold transition-all ${
+                      patient.gender === g 
+                        ? 'bg-white shadow-sm text-blue-600' 
+                        : 'text-gray-400'
+                    }`}
+                  >
+                    {g === 'male' ? '男' : '女'}
+                  </button>
+                ))}
+              </div>
             </div>
-            <span className="flex-1 text-sm font-semibold text-gray-600">年龄 (岁)</span>
-            <input
-              type="number"
-              placeholder="0"
-              value={patient.age}
-              onChange={(e) => handleChange('age', e.target.value)}
-              className="w-20 text-right outline-none text-sm font-bold text-gray-900 bg-transparent"
-            />
+            <div className="flex flex-col border-l border-gray-50 pl-4">
+              <span className="text-[10px] font-bold text-gray-400 uppercase mb-1">年龄 (岁)</span>
+              <input
+                type="number"
+                placeholder="0"
+                value={patient.age}
+                onChange={(e) => handleChange('age', e.target.value)}
+                className="w-full outline-none text-sm font-bold text-gray-900 bg-transparent"
+              />
+            </div>
+          </div>
+
+          {/* 床号与确诊日期 */}
+          <div className="grid grid-cols-2 gap-4 py-3">
+            <div className="flex flex-col">
+              <span className="text-[10px] font-bold text-gray-400 uppercase mb-1">床号</span>
+              <input
+                type="text"
+                placeholder="请输入"
+                value={patient.bedNumber}
+                onChange={(e) => handleChange('bedNumber', e.target.value)}
+                className="w-full outline-none text-sm font-bold text-gray-900 bg-transparent placeholder:text-gray-200"
+              />
+            </div>
+            <div className="flex flex-col border-l border-gray-50 pl-4">
+              <span className="text-[10px] font-bold text-gray-400 uppercase mb-1">确诊日期</span>
+              <input
+                type="date"
+                value={patient.diagnosisDate}
+                onChange={(e) => handleChange('diagnosisDate', e.target.value)}
+                className="w-full outline-none text-xs font-bold text-gray-900 bg-transparent"
+              />
+            </div>
           </div>
         </div>
       </IOSCard>
@@ -118,7 +145,7 @@ const PatientInfoForm: React.FC<Props> = ({ patient, setPatient, bsa }) => {
         </div>
       </IOSCard>
 
-      <IOSCard title="实验室数据">
+      <IOSCard title="实验室初诊数据">
         <div className="flex items-center justify-between p-2">
           <div className="flex flex-col">
             <span className="text-sm font-bold text-gray-700">初诊 WBC 计数</span>
