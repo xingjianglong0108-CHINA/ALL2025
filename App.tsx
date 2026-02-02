@@ -21,13 +21,11 @@ const App: React.FC = () => {
   const [patient, setPatient] = useState<PatientInfo>({
     name: '',
     hospitalId: '',
-    bedNumber: '',
     gender: '',
     age: '',
     height: '',
     weight: '',
-    initialWbc: '',
-    diagnosisDate: new Date().toISOString().split('T')[0]
+    initialWbc: ''
   });
 
   const bsa = useMemo(() => {

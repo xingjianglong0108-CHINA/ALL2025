@@ -2,13 +2,11 @@
 export interface PatientInfo {
   name: string;
   hospitalId: string;
-  bedNumber: string;
   gender: 'male' | 'female' | '';
   age: string;
   height: string;
   weight: string;
   initialWbc: string;
-  diagnosisDate: string;
 }
 
 export interface RiskState {

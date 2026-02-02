@@ -73,29 +73,6 @@ const PatientInfoForm: React.FC<Props> = ({ patient, setPatient, bsa }) => {
               />
             </div>
           </div>
-
-          {/* 床号与确诊日期 */}
-          <div className="grid grid-cols-2 gap-4 py-3">
-            <div className="flex flex-col">
-              <span className="text-[10px] font-bold text-gray-400 uppercase mb-1">床号</span>
-              <input
-                type="text"
-                placeholder="请输入"
-                value={patient.bedNumber}
-                onChange={(e) => handleChange('bedNumber', e.target.value)}
-                className="w-full outline-none text-sm font-bold text-gray-900 bg-transparent placeholder:text-gray-200"
-              />
-            </div>
-            <div className="flex flex-col border-l border-gray-50 pl-4">
-              <span className="text-[10px] font-bold text-gray-400 uppercase mb-1">确诊日期</span>
-              <input
-                type="date"
-                value={patient.diagnosisDate}
-                onChange={(e) => handleChange('diagnosisDate', e.target.value)}
-                className="w-full outline-none text-xs font-bold text-gray-900 bg-transparent"
-              />
-            </div>
-          </div>
         </div>
       </IOSCard>
 
