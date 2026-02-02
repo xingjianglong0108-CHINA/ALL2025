@@ -107,7 +107,7 @@ const TLSModule: React.FC<Props> = ({ patient, bsa }) => {
               <div className="flex items-center justify-between p-4 bg-gray-50 rounded-2xl border border-transparent hover:border-blue-100 transition-colors">
                 <div className="flex flex-col">
                   <span className="text-xs font-bold text-gray-700">巨块病变 (Bulky)</span>
-                  <span className="text-[9px] text-gray-400 mt-0.5">纵隔块>1/3胸径 或 淋巴结直径>10cm</span>
+                  <span className="text-[9px] text-gray-400 mt-0.5">纵隔块&gt;1/3胸径 或 淋巴结直径&gt;10cm</span>
                 </div>
                 <button
                   onClick={() => setIsBulky(!isBulky)}
@@ -232,7 +232,7 @@ const TLSModule: React.FC<Props> = ({ patient, bsa }) => {
                   </div>
                 </div>
               ))}
-              <p className="text-[8px] text-gray-400 italic mt-2">* 儿童血磷 > 2.1 mmol/L (6.5mg/dL)，成人 > 1.45 mmol/L (4.5mg/dL)。</p>
+              <p className="text-[8px] text-gray-400 italic mt-2">* 儿童血磷 &gt; 2.1 mmol/L (6.5mg/dL)，成人 &gt; 1.45 mmol/L (4.5mg/dL)。</p>
             </div>
           </IOSCard>
 
