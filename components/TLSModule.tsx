@@ -62,6 +62,23 @@ const TLSModule: React.FC<Props> = ({ patient, bsa }) => {
   const hydrationVolume = bsa > 0 ? bsa * risk.hydration : 0;
   const dripRate = hydrationVolume > 0 ? (hydrationVolume / 24).toFixed(1) : '0';
 
+  const w = parseFloat(patient.weight) || 0;
+  
+  // 别嘌醇计算逻辑
+  let allopurinolDoseMin = 0;
+  let allopurinolDoseMax = 0;
+  let allopurinolText = '';
+  
+  if (w > 0 && w < 10) {
+    allopurinolDoseMin = w * 10;
+    allopurinolDoseMax = w * 10;
+    allopurinolText = '10 mg/kg/d, q8h';
+  } else if (bsa > 0) {
+    allopurinolDoseMin = Math.min(bsa * 200, 600);
+    allopurinolDoseMax = Math.min(bsa * 300, 600);
+    allopurinolText = '200-300 mg/m²/d (Max 600mg), q8h';
+  }
+
   return (
     <div className="animate-in fade-in slide-in-from-bottom-6 duration-500 pb-20">
       {/* 子菜单导航 */}
@@ -131,6 +148,51 @@ const TLSModule: React.FC<Props> = ({ patient, bsa }) => {
             </div>
           </IOSCard>
 
+          <IOSCard title="TLS 风险分层标准 (Table 4)">
+            <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white">
+              <table className="w-full text-left text-[10px]">
+                <thead className="bg-gray-50 text-gray-500">
+                  <tr>
+                    <th className="px-3 py-2 font-bold border-b border-gray-200">风险等级</th>
+                    <th className="px-3 py-2 font-bold border-b border-gray-200">疾病与指标特征</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-100">
+                  <tr>
+                    <td className="px-3 py-2 font-bold text-red-600 bg-red-50/30">高危<br/>(High)</td>
+                    <td className="px-3 py-2 text-gray-700 bg-red-50/30">
+                      <ul className="list-disc pl-3 space-y-0.5">
+                        <li>Burkitt 白血病/淋巴瘤</li>
+                        <li>ALL 或 AML 且 WBC ≥ 100 × 10⁹/L</li>
+                        <li>已发生实验室 TLS (LTLS)</li>
+                      </ul>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className="px-3 py-2 font-bold text-orange-500 bg-orange-50/30">中危<br/>(Int.)</td>
+                    <td className="px-3 py-2 text-gray-700 bg-orange-50/30">
+                      <ul className="list-disc pl-3 space-y-0.5">
+                        <li>ALL 且 WBC &lt; 100 × 10⁹/L</li>
+                        <li>AML 且 WBC 25-100 × 10⁹/L</li>
+                        <li>伴有巨块病变 (Bulky disease)</li>
+                      </ul>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className="px-3 py-2 font-bold text-emerald-600 bg-emerald-50/30">低危<br/>(Low)</td>
+                    <td className="px-3 py-2 text-gray-700 bg-emerald-50/30">
+                      <ul className="list-disc pl-3 space-y-0.5">
+                        <li>AML 且 WBC &lt; 25 × 10⁹/L</li>
+                        <li>其他低增殖负荷肿瘤</li>
+                      </ul>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p className="text-[8px] text-gray-400 mt-2 italic">* 注：此表基于当前逻辑整理，如需补充 LDH、肾功能等指标，请参考原文档进行调整。</p>
+          </IOSCard>
+
           <div className={`p-5 rounded-[28px] border-2 bg-gradient-to-br ${risk.borderColor} ${risk.bgColor} mb-6 shadow-lg shadow-gray-100/50`}>
             <div className="flex items-center justify-between mb-3">
               <div>
@@ -176,6 +238,52 @@ const TLSModule: React.FC<Props> = ({ patient, bsa }) => {
                 <div className="bg-black/10 p-3 rounded-2xl border border-white/10">
                   <div className="text-white/60 text-[9px] font-black mb-1 uppercase tracking-tighter">临床监控频率</div>
                   <div className="text-[11px] font-black">{risk.monitor}</div>
+                </div>
+              </div>
+            </div>
+          </IOSCard>
+
+          <IOSCard title="常用药物剂量计算">
+            <div className="space-y-3">
+              <div className="flex items-center justify-between p-3 bg-gray-50 rounded-2xl border border-gray-100">
+                <div className="flex flex-col">
+                  <span className="text-xs font-bold text-gray-800">别嘌醇 (Allopurinol)</span>
+                  <span className="text-[10px] text-gray-500 mt-0.5">{allopurinolText || '200-300 mg/m²/d (Max 600mg), q8h'}</span>
+                </div>
+                <div className="text-right">
+                  <span className="text-sm font-black text-blue-600">
+                    {allopurinolDoseMin > 0 
+                      ? (allopurinolDoseMin === allopurinolDoseMax 
+                          ? `${allopurinolDoseMin.toFixed(0)} mg/d` 
+                          : `${allopurinolDoseMin.toFixed(0)}-${allopurinolDoseMax.toFixed(0)} mg/d`) 
+                      : '-'}
+                  </span>
+                  {allopurinolDoseMin > 0 && (
+                    <span className="text-[10px] text-gray-400 block mt-0.5">
+                      每次约 {(allopurinolDoseMin/3).toFixed(0)}{allopurinolDoseMin !== allopurinolDoseMax ? `-${(allopurinolDoseMax/3).toFixed(0)}` : ''} mg, q8h
+                    </span>
+                  )}
+                </div>
+              </div>
+
+              <div className="flex items-center justify-between p-3 bg-gray-50 rounded-2xl border border-gray-100">
+                <div className="flex flex-col">
+                  <span className="text-xs font-bold text-gray-800">羟基脲 (Hydroxyurea)</span>
+                  <span className="text-[10px] text-gray-500 mt-0.5">细胞减灭: 1-3 g/m²/d 或 50 mg/kg/d</span>
+                </div>
+                <div className="text-right">
+                  <span className="text-sm font-black text-blue-600">{bsa > 0 ? `${(bsa * 1).toFixed(1)}-${(bsa * 3).toFixed(1)} g/d` : '-'}</span>
+                  {w > 0 && <span className="text-[10px] text-gray-400 block mt-0.5">或按体重: {(w * 50).toFixed(0)} mg/d</span>}
+                </div>
+              </div>
+
+              <div className="flex items-center justify-between p-3 bg-gray-50 rounded-2xl border border-gray-100">
+                <div className="flex flex-col">
+                  <span className="text-xs font-bold text-gray-800">拉布立海 (Rasburicase)</span>
+                  <span className="text-[10px] text-gray-500 mt-0.5">0.15 - 0.2 mg/kg/d, 极高危首选</span>
+                </div>
+                <div className="text-right">
+                  <span className="text-sm font-black text-blue-600">{w > 0 ? `${(w * 0.15).toFixed(1)}-${(w * 0.2).toFixed(1)} mg/d` : '-'}</span>
                 </div>
               </div>
             </div>
